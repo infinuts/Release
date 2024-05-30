@@ -12,9 +12,11 @@
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .container {
@@ -24,12 +26,14 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 400px;
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
 
         .word {
             font-size: 24px;
             margin: 20px;
             color: #fff;
+            transition: color 0.3s;
         }
 
         button {
@@ -42,10 +46,35 @@
             border: none;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translate(-50%, -50%) scale(0);
+            border-radius: 50%;
+            transition: transform 0.5s ease;
+        }
+
+        button:hover::before {
+            transform: translate(-50%, -50%) scale(1);
         }
 
         button:hover {
             background-color: #45a049;
+            transform: scale(1.1);
+        }
+
+        button:active {
+            transform: scale(0.95);
         }
 
         .result,
@@ -53,6 +82,7 @@
             margin-top: 20px;
             font-size: 20px;
             color: #888;
+            transition: color 0.3s;
         }
 
         .score {
@@ -68,7 +98,10 @@
             top: 0;
             left: 0;
             right: 0;
-            background-color: transparent;
+            opacity: 0;
+            transform: translateY(-100%);
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 1;
         }
 
         .nav-bar button {
@@ -79,13 +112,63 @@
             color: white;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-bar button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translate(-50%, -50%) scale(0);
+            border-radius: 50%;
+            transition: transform 0.5s ease;
+        }
+
+        .nav-bar button:hover::before {
+            transform: translate(-50%, -50%) scale(1);
         }
 
         .nav-bar button:hover {
             background-color: #369636;
+            transform: scale(1.1);
+        }
+
+        .tablist {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            width: 30px;
+            height: 30px;
+            background: url('menu-icon.png') no-repeat center center;
+            background-size: contain;
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 2;
+        }
+
+        .nav-visible .nav-bar {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .nav-visible .tablist {
+            transform: rotate(90deg);
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            color: #fff;
+            font-size: 14px;
         }
 
         .credits-button {
@@ -110,26 +193,65 @@
         .left-button {
             position: fixed;
             left: 10px;
-            top: 10px;
+            top: 50px;
         }
 
-        .top-button {
+        .theme-toggle {
             position: fixed;
             top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 10px;
+            font-size: 18px;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
         }
 
-        .additional-button {
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+        .theme-toggle:hover {
+            background-color: #45a049;
+        }
+
+        .dark-mode {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .dark-mode .container {
+            background-color: #f0f0f0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .dark-mode .word {
+            color: #000;
+        }
+
+        .dark-mode .result,
+        .dark-mode .score {
+            color: #000;
+        }
+
+        .dark-mode .nav-bar {
+            background-color: #ddd;
+            color: #000;
+        }
+
+        .dark-mode button {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .dark-mode button:hover {
+            background-color: #555;
         }
     </style>
 </head>
 
 <body>
+    <div class="tablist" onclick="toggleNavbar()"></div>
     <div class="nav-bar">
         <button onClick="window.location.href='ismfa3il.html'">اسم الفاعل</button>
         <button onClick="window.location.href='maf3oul.html'">اسم مفعول</button>
@@ -137,6 +259,7 @@
     </div>
     <button class="credits-button" onClick="window.location.href='credits.html'">Credits</button>
     <button class="left-button" onClick="window.location.href='lessons.html'">الدروس</button>
+    <button class="theme-toggle" onClick="toggleTheme()">Toggle Theme</button>
     <div class="container">
         <div id="wordDisplay" class="word"></div>
         <button onClick="checkAnswer('ء')">ء</button>
@@ -146,6 +269,7 @@
         <div id="result" class="result"></div>
         <div id="score" class="score"></div>
     </div>
+    <footer class="footer">© 2024 The Jules Ferry Project</footer>
     <script>
         const words = [{
                 "word": "هَيْءة",
@@ -268,8 +392,21 @@
       document.getElementById('result').textContent = '';
     }
 
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    function toggleNavbar() {
+      document.body.classList.toggle('nav-visible');
+    }
+
+    document.querySelector('.left-button').addEventListener('click', function() {
+      document.body.classList.remove('nav-visible');
+    });
+
     // Initialize the game by displaying the first word
     displayWord();
   </script>
 </body>
+
 </html>
